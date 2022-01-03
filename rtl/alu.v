@@ -57,17 +57,17 @@ module alu(
         		`EXE_SLT_OP: //比较
             		result <= subr[31];
 				`EXE_SLL_OP: // 左移位
-            		result <= 32'bX;
+            		result <= num2<<sa;
 				`EXE_SRL_OP: // 右移位 
-            		result <= 32'bX;
+            		result <= num2>>sa;
 				`EXE_SRA_OP: // 带符号右移位
-            		result <= 32'bX;
+            		result <= ({32{num2[31]}}<<(6'd32-{1'b0,sa}))|num2>>sa;
 				`EXE_SLLV_OP: // 左移位 使用rs内部的值作为位移量
-            		result <= 32'bX;
+            		result <= num2<<num1[4:0];
 				`EXE_SRLV_OP: // 右移位 使用rs内部的值作为位移量
-            		result <= 32'bX;
+            		result <= num2>>num1[4:0];
 				`EXE_SRAV_OP: // 带符号右移位 使用rs内部的值作为位移量
-            		result <= 32'bX;
+            		result <= ({32{num2[31]}}<<(6'd32-{1'b0,num1[4:0]}))|num2>>num1[4:0];
 				//立即数逻辑运算：
 				`EXE_ANDI_OP:
 					result <= num1 & uenum2;
