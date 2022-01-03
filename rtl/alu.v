@@ -77,7 +77,7 @@ module alu(
 					result <= num1 ^ uenum2;
 				`EXE_LUI_OP:
 					result <= luinum2;
-        		default:
+        		default://default
             		result <= 32'b0;
     		endcase
 		end
