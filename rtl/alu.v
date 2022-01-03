@@ -56,9 +56,15 @@ module alu(
             		result <= subr[31];
 				`EXE_SLL_OP: // 左移位
             		result <= 32'bX;
-				`EXE_SRL_OP: // 右移位+
+				`EXE_SRL_OP: // 右移位 
             		result <= 32'bX;
 				`EXE_SRA_OP: // 带符号右移位
+            		result <= 32'bX;
+				`EXE_SLLV_OP: // 左移位 使用rs内部的值作为位移量
+            		result <= 32'bX;
+				`EXE_SRLV_OP: // 右移位 使用rs内部的值作为位移量
+            		result <= 32'bX;
+				`EXE_SRAV_OP: // 带符号右移位 使用rs内部的值作为位移量
             		result <= 32'bX;
         		default:
             		result <= 32'b0;
