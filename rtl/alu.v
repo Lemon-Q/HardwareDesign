@@ -29,10 +29,12 @@ module alu(
 	output wire zero
     );
 
-	wire[31:0] addr,subr,fannum2;
-	assign fannum2 = ~num2;
+	wire[31:0] addr,subr,fannum2,uenum2,luinum2;
+	assign fannum2 = ~num2; //反num2（拼音）
 	assign subr = num1 + fannum2 + 1;
-	assign addr =num1 + num2;
+	assign addr = num1 + num2;
+	assign uenum2 = {{16{1'b0}}, num2[15:0]}; // Unsigned extension num2
+	assign luinum2 = {num2[15:0], {16{1'b0}}}; //Lui extension num2
 	always @(*)
 		begin
     		case (alucontrol)
@@ -66,6 +68,15 @@ module alu(
             		result <= 32'bX;
 				`EXE_SRAV_OP: // 带符号右移位 使用rs内部的值作为位移量
             		result <= 32'bX;
+				//立即数逻辑运算：
+				`EXE_ANDI_OP:
+					result <= num1 & uenum2;
+				`EXE_XORI_OP:
+					result <= num1 | uenum2;
+				`EXE_ORI_OP:
+					result <= num1 ^ uenum2;
+				`EXE_LUI_OP:
+					result <= luinum2;
         		default:
             		result <= 32'b0;
     		endcase

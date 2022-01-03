@@ -49,8 +49,16 @@ module aludec(
 			endcase
 			`EXE_LW: alucontrol <= `EXE_ADD_OP;// lw add (for lw/sw/addi)
 			`EXE_SW: alucontrol <= `EXE_ADD_OP;//sw
-			`EXE_ADDI: alucontrol <= `EXE_ADD_OP;//addi
+
 			`EXE_BEQ: alucontrol <= `EXE_SUB_OP;//sub (for beq)
+			//立即数型算术运算
+			`EXE_ADDI: alucontrol <= `EXE_ADD_OP;//addi
+			`EXE_ADDIU: alucontrol <= `EXE_ADDU_OP; //addiu
+			//立即数型逻辑运算
+			`EXE_ANDI:alucontrol <= `EXE_ANDI_OP;
+			`EXE_XORI:alucontrol <= `EXE_XORI_OP;
+			`EXE_ORI:alucontrol <= `EXE_ORI_OP;
+			`EXE_LUI:alucontrol <= `EXE_LUI_OP;
 		endcase
 	end
 endmodule
