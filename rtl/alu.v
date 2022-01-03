@@ -77,7 +77,7 @@ module alu(
 					result <= num1 ^ uenum2;
 				`EXE_LUI_OP:
 					result <= luinum2;
-        		default: //移位指令全部完成，ori，lui顺便完成测试，未经二次测试。
+        		default: //移位指令全部完成，ori，lui顺便完成测试，未经二次测试
             		result <= 32'b0;
     		endcase
 		end
