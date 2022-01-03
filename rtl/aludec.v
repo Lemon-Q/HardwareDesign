@@ -40,6 +40,7 @@ module aludec(
 				`EXE_SLT:alucontrol <= `EXE_SLT_OP; //slt
 				`EXE_XOR:alucontrol <= `EXE_XOR_OP; //xor
 				`EXE_NOR:alucontrol <= `EXE_NOR_OP; //nor
+				`EXE_
 				default:  alucontrol <= 8'b00000000;
 			endcase
 		endcase
