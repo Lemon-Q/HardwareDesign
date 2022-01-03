@@ -32,3 +32,5 @@ module top(
 	inst_mem imem(~clk,pc,instr);
 	data_mem dmem(~clk,{4{memwrite}},dataadr,writedata,readdata);
 endmodule
+
+//git config --global --unset http.proxy

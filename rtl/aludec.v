@@ -32,15 +32,17 @@ module aludec(
 			2'b01: alucontrol <= `EXE_SUB_OP;//sub (for beq)
 			default : case (funct)
 				`EXE_ADD:alucontrol <= `EXE_ADD_OP; //add
-				`EXE_ADDU:alucontrol <= `EXE_ADDU_OP;
+				`EXE_ADDU:alucontrol <= `EXE_ADDU_OP; //unsigned add
 				`EXE_SUB:alucontrol <= `EXE_SUB_OP; //sub
-				`EXE_SUBU:alucontrol <= `EXE_SUBU_OP;
+				`EXE_SUBU:alucontrol <= `EXE_SUBU_OP;//unsigned sub
 				`EXE_AND:alucontrol <= `EXE_AND_OP; //and
 				`EXE_OR:alucontrol <= `EXE_OR_OP; //or
 				`EXE_SLT:alucontrol <= `EXE_SLT_OP; //slt
 				`EXE_XOR:alucontrol <= `EXE_XOR_OP; //xor
 				`EXE_NOR:alucontrol <= `EXE_NOR_OP; //nor
-				`EXE_
+				`EXE_SLL:alucontrol <= `EXE_SLL_OP; //sll
+				`EXE_SRL:alucontrol <= `EXE_SRL_OP; //srl
+				`EXE_SRA:alucontrol <= `EXE_SRA_OP; //sra
 				default:  alucontrol <= 8'b00000000;
 			endcase
 		endcase
