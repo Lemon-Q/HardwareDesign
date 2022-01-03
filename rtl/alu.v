@@ -72,12 +72,12 @@ module alu(
 				`EXE_ANDI_OP:
 					result <= num1 & uenum2;
 				`EXE_XORI_OP:
-					result <= num1 | uenum2;
-				`EXE_ORI_OP:
 					result <= num1 ^ uenum2;
+				`EXE_ORI_OP:
+					result <= num1 | uenum2;
 				`EXE_LUI_OP:
 					result <= luinum2;
-        		default: //移位指令全部完成，ori，lui顺便完成测试，未经二次测试.
+        		default: //改正或与异或bug，逻辑指令二次测试完成
             		result <= 32'b0;
     		endcase
 		end
