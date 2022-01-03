@@ -4,10 +4,10 @@ Running: D:/Xilinx/Vivado/2021.2/bin/unwrapped/win64.o/xelab.exe --incr --debug 
 Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 8 for port 'd' [C:/VivadoWorks/HardwareDesign/rtl/controller.v:74]
-WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 8 for port 'q' [C:/VivadoWorks/HardwareDesign/rtl/controller.v:75]
-WARNING: [VRFC 10-3091] actual bit length 2 differs from formal bit length 8 for port 'd' [C:/VivadoWorks/HardwareDesign/rtl/controller.v:79]
-WARNING: [VRFC 10-3091] actual bit length 2 differs from formal bit length 8 for port 'q' [C:/VivadoWorks/HardwareDesign/rtl/controller.v:80]
+WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 8 for port 'd' [C:/VivadoWorks/HardwareDesign/rtl/controller.v:73]
+WARNING: [VRFC 10-3091] actual bit length 3 differs from formal bit length 8 for port 'q' [C:/VivadoWorks/HardwareDesign/rtl/controller.v:74]
+WARNING: [VRFC 10-3091] actual bit length 2 differs from formal bit length 8 for port 'd' [C:/VivadoWorks/HardwareDesign/rtl/controller.v:78]
+WARNING: [VRFC 10-3091] actual bit length 2 differs from formal bit length 8 for port 'q' [C:/VivadoWorks/HardwareDesign/rtl/controller.v:79]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis

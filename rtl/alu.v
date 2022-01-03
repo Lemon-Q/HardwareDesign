@@ -35,6 +35,7 @@ module alu(
 	assign addr = num1 + num2;
 	assign uenum2 = {{16{1'b0}}, num2[15:0]}; // Unsigned extension num2
 	assign luinum2 = {num2[15:0], {16{1'b0}}}; //Lui extension num2
+	
 	always @(*)
 		begin
     		case (alucontrol)
@@ -51,7 +52,11 @@ module alu(
             		result <= subr[31];
 				`EXE_SLTU_OP://比较,不考虑溢出
 					result <= subr[31];
-				
+				//访存指令，sw和lw使用EXE_ADD_OP完成，不再考虑:
+				`EXE_SH_OP:
+					result <= 32'bx;
+				`EXE_SB_OP:
+					result <= 32'bx;
 				//非立即数逻辑运算（已测）
         		`EXE_AND_OP: //与
             		result <= num1 & num2;

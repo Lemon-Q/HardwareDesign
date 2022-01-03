@@ -52,10 +52,6 @@ module aludec(
 			endcase
 			//访存指令
 			`EXE_LW: alucontrol <= `EXE_ADD_OP;// lw add (for lw/sw/addi)
-			`EXE_LH: alucontrol <= `EXE_LH_OP;
-			`EXE_LHU:alucontrol <= `EXE_LHU_OP;
-			`EXE_LB: alucontrol <= `EXE_LB_OP;
-			`EXE_LBU: alucontrol <= `EXE_LBU_OP;
 			`EXE_SW: alucontrol <= `EXE_ADD_OP;//sw
 			`EXE_SH: alucontrol <= `EXE_SH_OP;
 			`EXE_SB: alucontrol <= `EXE_SB_OP;
