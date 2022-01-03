@@ -38,6 +38,7 @@ module alu(
 	always @(*)
 		begin
     		case (alucontrol)
+				//算数运算，加减比较，立即数不需要此处参与
         		`EXE_ADD_OP: //加
 					result <= addr;
         		`EXE_ADDU_OP://加，不考虑溢出
@@ -46,6 +47,12 @@ module alu(
             		result <= subr;
         		`EXE_SUBU_OP://减，不考虑溢出
             		result <= subr;
+				`EXE_SLT_OP: //比较
+            		result <= subr[31];
+				`EXE_SLTU_OP://比较,不考虑溢出
+					result <= subr[31];
+				
+				//非立即数逻辑运算（已测）
         		`EXE_AND_OP: //与
             		result <= num1 & num2;
         		`EXE_OR_OP: //或
@@ -54,8 +61,7 @@ module alu(
             		result <= num1 ^ num2;
         		`EXE_NOR_OP: //或非
             		result <= ~(num1 | num2);
-        		`EXE_SLT_OP: //比较
-            		result <= subr[31];
+				//移位运算（已测）
 				`EXE_SLL_OP: // 左移位
             		result <= num2<<sa;
 				`EXE_SRL_OP: // 右移位 
