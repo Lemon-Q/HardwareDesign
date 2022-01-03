@@ -21,34 +21,44 @@
 
 
 module alu(
-	input wire[31:0] a,b, // 两个源操作数
-	input wire[2:0] op,
-	output reg[31:0] y,
-	output reg overflow,
+	input wire[31:0] num1,num2, // 两个源操作数
+	input wire[7:0] alucontrol,
+	output reg[31:0] result,
+	output wire overflow,
 	output wire zero
     );
 
-	wire[31:0] s,bout;
-	assign bout = op[2] ? ~b : b;
-	assign s = a + bout + op[2];
-	always @(*) begin
-		case (op[1:0])
-			2'b00: y <= a & bout;
-			2'b01: y <= a | bout;
-			2'b10: y <= s;
-			2'b11: y <= s[31];
-			default : y <= 32'b0;
-		endcase	
-	end
-	assign zero = (y == 32'b0);
+	wire[31:0] addr,subr,fannum2;
+	assign fannum2 = ~num2;
+	assign subr = num1 + fannum2 + 1;
+	assign addr =num1 + num2;
+	always @(*)
+		begin
+    		case (alucontrol)
+        		`EXE_ADD_OP: 
+					result <= addr;
+        		`EXE_ADDU_OP:
+            		result <= addr;
+        		`EXE_SUB_OP:
+            		result <= subr;
+        		`EXE_SUBU_OP:
+            		result <= subr;
+        		`EXE_AND_OP:
+            		result <= num1 & num2;
+        		`EXE_OR_OP:
+            		result <= num1 | num2;
+        		`EXE_XOR_OP:
+            		result <= num1 ^ num2;
+        		`EXE_NOR_OP:
+            		result <= ~(num1 | num2);
+        		`EXE_SLT_OP:
+            		result <= subr[31];
+        		default:
+            		result <= 32'b0;
+    		endcase
+		end
+	
+	assign overflow= ((alucontrol==`EXE_ADD_OP)|(alucontrol==`EXE_ADDI_OP))?((!num1[31]&&!num2[31]&&result[31])|(num1[31]&&num2[31]&&!result[31])):
+                (alucontrol==`EXE_SUB_OP)?((!num1[31]&num2[31]&result[31])|(num1[31]&!num2[31]&!result[31])):1'b0;
 
-	always @(*) begin
-		case (op[2:1])
-			2'b01:overflow <= a[31] & b[31] & ~s[31] |
-							~a[31] & ~b[31] & s[31];
-			2'b11:overflow <= ~a[31] & b[31] & s[31] |
-							a[31] & ~b[31] & ~s[31];
-			default : overflow <= 1'b0;
-		endcase	
-	end
 endmodule
