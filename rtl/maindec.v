@@ -39,7 +39,6 @@ module maindec(
 			`EXE_SW:controls <= 9'b001010000;//SW
 			`EXE_BEQ:controls <= 9'b000100001;//BEQ
 			`EXE_ADDI:controls <= 9'b101000000;//ADDI
-			
 			`EXE_J:controls <= 9'b000000100;//J
 			default:  controls <= 9'b000000000;//illegal op
 		endcase

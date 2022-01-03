@@ -23,14 +23,12 @@
 
 module aludec(
 	input wire[5:0] funct,
-	input wire[1:0] aluop,
+	input wire[5:0] op,
 	output reg[7:0] alucontrol
     );
 	always @(*) begin
-		case (aluop)
-			2'b00: alucontrol <= `EXE_ADD_OP;//add (for lw/sw/addi)
-			2'b01: alucontrol <= `EXE_SUB_OP;//sub (for beq)
-			default : case (funct)
+		case (op)
+			6'b000000:case (funct)
 				`EXE_ADD:alucontrol <= `EXE_ADD_OP; //add
 				`EXE_ADDU:alucontrol <= `EXE_ADDU_OP; //unsigned add
 				`EXE_SUB:alucontrol <= `EXE_SUB_OP; //sub
@@ -40,14 +38,19 @@ module aludec(
 				`EXE_SLT:alucontrol <= `EXE_SLT_OP; //slt
 				`EXE_XOR:alucontrol <= `EXE_XOR_OP; //xor
 				`EXE_NOR:alucontrol <= `EXE_NOR_OP; //nor
+				//移位
 				`EXE_SLL:alucontrol <= `EXE_SLL_OP; //sll
 				`EXE_SRL:alucontrol <= `EXE_SRL_OP; //srl
 				`EXE_SRA:alucontrol <= `EXE_SRA_OP; //sra
 				`EXE_SLLV:alucontrol <= `EXE_SLLV_OP; //sllv
 				`EXE_SRLV:alucontrol <= `EXE_SRLV_OP; //srlv
 				`EXE_SRAV:alucontrol <= `EXE_SRAV_OP; //srav
-				default:  alucontrol <= 8'b00000000;
+				default:  alucontrol <= 8'b00000000; 
 			endcase
+			`EXE_LW: alucontrol <= `EXE_ADD_OP;// lw add (for lw/sw/addi)
+			`EXE_SW: alucontrol <= `EXE_ADD_OP;//sw
+			`EXE_ADDI: alucontrol <= `EXE_ADD_OP;//addi
+			`EXE_BEQ: alucontrol <= `EXE_SUB_OP;//sub (for beq)
 		endcase
 	end
 endmodule

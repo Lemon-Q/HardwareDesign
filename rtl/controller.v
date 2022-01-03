@@ -55,9 +55,9 @@ module controller(
 		branchD,alusrcD,
 		regdstD,regwriteD,
 		jumpD,
-		aluopD
+		aluopD //maindec的aluop不再使用，aludec直接使用op来进行alu译码,为了整体正确不要删
 		);
-	aludec ad(functD,aluopD,alucontrolD);
+	aludec ad(functD,opD,alucontrolD);
 
 	assign pcsrcD = branchD & equalD;
 
