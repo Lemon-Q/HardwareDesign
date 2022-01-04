@@ -64,8 +64,9 @@ module datapath(
 	wire [4:0] saE;
 	wire [4:0] writeregE;
 	wire [31:0] signimmE;
-	wire [31:0] srcaE,srca2E,srcbE,srcb2E,srcb3E;
+	wire [31:0] srcaE,srca2E,srcbE,srcb2E,srcb3E,srcb4E;
 	wire [31:0] aluoutE;
+	wire [1:0] srcb3Elower2;
 	//mem stage
 	wire [4:0] writeregM;
 	//writeback stage
@@ -141,10 +142,15 @@ module datapath(
 	alu alu(srca2E,srcb3E,alucontrolE,saE,aluoutE);
 	mux2 #(5) wrmux(rtE,rdE,regdstE,writeregE);
 
+	storemux storemux(srcb2E,alucontrolE,srcb3Elower2,srcb4E);
+
+
+
 	//mem stage
-	flopr #(32) r1M(clk,rst,srcb2E,writedataM);
+	flopr #(32) r1M(clk,rst,srcb4E,writedataM);
 	flopr #(32) r2M(clk,rst,aluoutE,aluoutM);
 	flopr #(5) r3M(clk,rst,writeregE,writeregM);
+
 
 	//writeback stage
 	flopr #(32) r1W(clk,rst,aluoutM,aluoutW);
