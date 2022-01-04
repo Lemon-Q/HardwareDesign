@@ -23,14 +23,15 @@
 module top(
 	input wire clk,rst,
 	output wire[31:0] writedata,dataadr,
-	output wire memwrite
+	output wire[3:0] wa
     );
 
 	wire[31:0] pc,instr,readdata;
 
-	mips mips(clk,rst,pc,instr,memwrite,dataadr,writedata,readdata);
+	mips mips(clk,rst,pc,instr,wa,dataadr,writedata,readdata);
 	inst_mem imem(~clk,pc,instr);
-	data_mem dmem(~clk,{4{memwrite}},dataadr,writedata,readdata);
+	data_mem dmem(~clk,wa,dataadr,writedata,readdata);
+
 endmodule
 
 //git config --global --unset http.proxy

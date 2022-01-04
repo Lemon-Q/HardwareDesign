@@ -25,18 +25,19 @@ module testbench();
 	reg rst;
 
 	wire[31:0] writedata,dataadr;
-	wire memwrite;
+	wire [3:0] wa;
 
-	top dut(clk,rst,writedata,dataadr,memwrite);
+	top dut(clk,rst,writedata,dataadr,wa);
 
 	initial begin 
 		rst <= 1;
-		#200;
+		#20;
 		rst <= 0;
 	end
 
 	always begin
 		clk <= 1;
+		#10;
 		#10;
 		clk <= 0;
 		#10;
@@ -44,16 +45,14 @@ module testbench();
 	end
 
 	always @(negedge clk) begin
-		if(memwrite) begin
+		if(wa) begin
 			/* code */
 			if(dataadr === 84 & writedata === 7) begin
 				/* code */
 				$display("Simulation succeeded");
-				$stop;
 			end else if(dataadr !== 80) begin
 				/* code */
 				$display("Simulation Failed");
-				$stop;
 			end
 		end
 	end

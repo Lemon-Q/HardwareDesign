@@ -52,11 +52,19 @@ module alu(
 				`EXE_SLT_OP: //比较
             		result <= subr[31];
 				`EXE_SLTU_OP://比较,不考虑溢出
-					result <= subr[31];
+					result <= subr[31]; // SLTU有BUG
 				//访存指令，sw和lw使用EXE_ADD_OP完成，不再考虑:
 				`EXE_SH_OP:
 					result <= addr;
 				`EXE_SB_OP:
+					result <= addr;
+				`EXE_LH_OP: 
+					result <= addr;
+            	`EXE_LHU_OP:
+					result <= addr;
+            	`EXE_LB_OP:
+					result <= addr;
+            	`EXE_LBU_OP: 
 					result <= addr;
 				//非立即数逻辑运算（已测）
         		`EXE_AND_OP: //与

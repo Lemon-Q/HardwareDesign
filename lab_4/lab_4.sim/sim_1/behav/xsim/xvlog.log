@@ -25,12 +25,17 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "C:/VivadoWorks/HardwareDesign/rtl/f
 INFO: [VRFC 10-311] analyzing module floprc
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/VivadoWorks/HardwareDesign/rtl/hazard.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module hazard
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/VivadoWorks/HardwareDesign/lab_4/lab_4.srcs/sources_1/new/loaddec.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module loaddec
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/VivadoWorks/HardwareDesign/lab_4/lab_4.srcs/sources_1/new/loadmux.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module loadmux
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/VivadoWorks/HardwareDesign/rtl/maindec.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module maindec
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/VivadoWorks/HardwareDesign/rtl/mips.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module mips
-INFO: [VRFC 10-2458] undeclared symbol branchD, assumed default net type wire [C:/VivadoWorks/HardwareDesign/rtl/mips.v:42]
-INFO: [VRFC 10-2458] undeclared symbol jumpD, assumed default net type wire [C:/VivadoWorks/HardwareDesign/rtl/mips.v:42]
+INFO: [VRFC 10-2458] undeclared symbol branchD, assumed default net type wire [C:/VivadoWorks/HardwareDesign/rtl/mips.v:43]
+INFO: [VRFC 10-2458] undeclared symbol jumpD, assumed default net type wire [C:/VivadoWorks/HardwareDesign/rtl/mips.v:43]
+INFO: [VRFC 10-2458] undeclared symbol memwriteM, assumed default net type wire [C:/VivadoWorks/HardwareDesign/rtl/mips.v:52]
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/VivadoWorks/HardwareDesign/rtl/mux2.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module mux2
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/VivadoWorks/HardwareDesign/rtl/mux3.v" into library xil_defaultlib

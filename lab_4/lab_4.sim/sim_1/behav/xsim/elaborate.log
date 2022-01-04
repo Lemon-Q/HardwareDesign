@@ -33,8 +33,13 @@ Compiling module xil_defaultlib.mux3(WIDTH=32)
 Compiling module xil_defaultlib.alu
 Compiling module xil_defaultlib.mux2(WIDTH=5)
 Compiling module xil_defaultlib.storemux
+Compiling module xil_defaultlib.loaddec
 Compiling module xil_defaultlib.flopr(WIDTH=32)
 Compiling module xil_defaultlib.flopr(WIDTH=5)
+Compiling module xil_defaultlib.flopr(WIDTH=3)
+Compiling module xil_defaultlib.flopr(WIDTH=2)
+Compiling module xil_defaultlib.flopr(WIDTH=4)
+Compiling module xil_defaultlib.loadmux
 Compiling module xil_defaultlib.datapath
 Compiling module xil_defaultlib.mips
 Compiling module blk_mem_gen_v8_4_5.blk_mem_gen_v8_4_5_output_stage(...

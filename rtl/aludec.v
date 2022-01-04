@@ -52,6 +52,11 @@ module aludec(
 			endcase
 			//访存指令
 			`EXE_LW: alucontrol <= `EXE_ADD_OP;// lw add (for lw/sw/addi)
+			`EXE_LH: alucontrol <= `EXE_LH_OP;
+			`EXE_LHU: alucontrol <= `EXE_LHU_OP;
+			`EXE_LB: alucontrol <= `EXE_LB_OP;
+			`EXE_LBU:alucontrol <= `EXE_LBU_OP;
+
 			`EXE_SW: alucontrol <= `EXE_ADD_OP;//sw
 			`EXE_SH: alucontrol <= `EXE_SH_OP;
 			`EXE_SB: alucontrol <= `EXE_SB_OP;
@@ -67,21 +72,7 @@ module aludec(
 			`EXE_XORI:alucontrol <= `EXE_XORI_OP;
 			`EXE_ORI:alucontrol <= `EXE_ORI_OP;
 			`EXE_LUI:alucontrol <= `EXE_LUI_OP;
+			
 		endcase
 	end
 endmodule
-
-	// always @(*) begin
-	// 	case (aluop)
-	// 		2'b00: alucontrol <= 3'b010;//add (for lw/sw/addi)
-	// 		2'b01: alucontrol <= 3'b110;//sub (for beq)
-	// 		default : case (funct)
-	// 			`EXE_ADD:alucontrol <= 3'b010; //add
-	// 			`EXE_SUB:alucontrol <= 3'b110; //sub
-	// 			`EXE_AND:alucontrol <= 3'b000; //and
-	// 			`EXE_OR:alucontrol <= 3'b001; //or
-	// 			`EXE_SLT:alucontrol <= 3'b111; //slt
-	// 			default:  alucontrol <= 3'b000;
-	// 		endcase
-	// 	endcase
-	// end

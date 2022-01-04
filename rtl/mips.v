@@ -24,7 +24,7 @@ module mips(
 	input wire clk,rst,
 	output wire[31:0] pcF,
 	input wire[31:0] instrF,
-	output wire memwriteM,
+	output wire[3:0] wa,
 	output wire[31:0] aluoutM,writedataM,
 	input wire[31:0] readdataM 
 );
@@ -34,6 +34,7 @@ module mips(
 			regwriteE,regwriteM,regwriteW;
 	wire [7:0] alucontrolE;
 	wire flushE,equalD;
+	wire [3:0] waM;
 
 	controller c(
 		clk,rst,
@@ -69,14 +70,18 @@ module mips(
 		regwriteE,
 		alucontrolE,
 		flushE,
+		
 		//mem stage
 		memtoregM,
 		regwriteM,
 		aluoutM,writedataM,
 		readdataM,
+		waM,
 		//writeback stage
 		memtoregW,
 		regwriteW
 	    );
+
+	assign wa = (memwriteM == 0)? 4'b0000 : waM;
 	
 endmodule

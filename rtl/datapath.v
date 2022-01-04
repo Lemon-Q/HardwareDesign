@@ -36,11 +36,13 @@ module datapath(
 	input wire regwriteE,
 	input wire[7:0] alucontrolE,
 	output wire flushE,
+	
 	//mem stage
 	input wire memtoregM,
 	input wire regwriteM,
 	output wire[31:0] aluoutM,writedataM,
 	input wire[31:0] readdataM,
+	output wire [3:0] waM,
 	//writeback stage
 	input wire memtoregW,
 	input wire regwriteW
@@ -67,11 +69,17 @@ module datapath(
 	wire [31:0] srcaE,srca2E,srcbE,srcb2E,srcb3E,srcb4E;
 	wire [31:0] aluoutE;
 	wire [1:0] srcb3Elower2;
+	wire [2:0] uorlborhE;
+	wire[3:0] waE;
 	//mem stage
 	wire [4:0] writeregM;
+	wire [1:0] srcb3Mlower2;
+	wire [2:0] uorlborhM;
 	//writeback stage
 	wire [4:0] writeregW;
-	wire [31:0] aluoutW,readdataW,resultW;
+	wire [31:0] aluoutW,readdataW,resultW,result2W;
+	wire [1:0] srcb3Wlower2;
+	wire [2:0] uorlborhW;
 
 	//hazard detection
 	hazard h(
@@ -105,7 +113,7 @@ module datapath(
 		jumpD,pcnextFD);
 
 	//regfile (operates in decode and writeback)
-	regfile rf(clk,regwriteW,rsD,rtD,writeregW,resultW,srcaD,srcbD);
+	regfile rf(clk,regwriteW,rsD,rtD,writeregW,result2W,srcaD,srcbD);
 
 	//fetch stage logic
 	pc #(32) pcreg(clk,rst,~stallF,pcnextFD,pcF);
@@ -116,7 +124,7 @@ module datapath(
 	signext se(instrD[15:0],signimmD);
 	sl2 immsh(signimmD,signimmshD);
 	adder pcadd2(pcplus4D,signimmshD,pcbranchD);
-	mux2 #(32) forwardamux(srcaD,aluoutM,forwardaD,srca2D);
+	mux2 #(32) forwardamux(srcaD,aluoutM,forwardaD,srca2D); 
 	mux2 #(32) forwardbmux(srcbD,aluoutM,forwardbD,srcb2D);
 	eqcmp comp(srca2D,srcb2D,equalD);
 
@@ -141,20 +149,28 @@ module datapath(
 	mux2 #(32) srcbmux(srcb2E,signimmE,alusrcE,srcb3E);
 	alu alu(srca2E,srcb3E,alucontrolE,saE,aluoutE);
 	mux2 #(5) wrmux(rtE,rdE,regdstE,writeregE);
+	
+	assign srcb3Elower2 = srcb3E[1:0];
 
-	storemux storemux(srcb2E,alucontrolE,srcb3Elower2,srcb4E);
-
-
+	storemux storemux(srcb2E,alucontrolE,srcb3Elower2,waE,srcb4E);
+	loaddec loaddec(alucontrolE,uorlborhE);
 
 	//mem stage
+	
 	flopr #(32) r1M(clk,rst,srcb4E,writedataM);
 	flopr #(32) r2M(clk,rst,aluoutE,aluoutM);
 	flopr #(5) r3M(clk,rst,writeregE,writeregM);
-
-
+	flopr #(3) r4M(clk,rst,uorlborhE,uorlborhM);
+	flopr #(2) r5M(clk,rst,srcb3Elower2,srcb3Mlower2);
+	flopr #(4) r6M(clk,rst,waE,waM);
+	
 	//writeback stage
 	flopr #(32) r1W(clk,rst,aluoutM,aluoutW);
 	flopr #(32) r2W(clk,rst,readdataM,readdataW);
 	flopr #(5) r3W(clk,rst,writeregM,writeregW);
+	flopr #(3) r4W(clk,rst,uorlborhM,uorlborhW);
+	flopr #(2) r5W(clk,rst,srcb3Mlower2,srcb3Wlower2);
+
 	mux2 #(32) resmux(aluoutW,readdataW,memtoregW,resultW);
+	loadmux loadmux(resultW,uorlborhW,srcb3Wlower2,result2W);//暂时Drop掉该多路选择器，这个选择器本身没有值得留意的bug,如何Drop见上面的写回
 endmodule
