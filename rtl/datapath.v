@@ -144,7 +144,8 @@ module datapath(
 	adder pcadd2(pcplus4D,signimmshD,pcbranchD);
 	mux2 #(32) forwardamux(srcaD,aluoutM,forwardaD,srca2D); 
 	mux2 #(32) forwardbmux(srcbD,aluoutM,forwardbD,srcb2D);
-	eqcmp comp(srca2D,srcb2D,equalD);
+				//eqcmp在实现上有修改，为了实现B跳转指令
+	eqcmp comp(srca2D,srcb2D,opD,rtD,equalD);
 
 	assign opD = instrD[31:26];
 	assign functD = instrD[5:0];

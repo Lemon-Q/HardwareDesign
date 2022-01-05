@@ -22,8 +22,17 @@
 
 module eqcmp(
 	input wire [31:0] a,b,
+	input wire [5:0]opcode,
+	input wire [4:0]rt,
 	output wire y
     );
 
-	assign y = (a == b) ? 1 : 0;
+	assign y = (opcode == `EXE_BEQ && a == b)? 1:
+			   (opcode == `EXE_BNE && ~(a == b))? 1:
+			   (opcode == `EXE_BGEZ && a[31] == 0)? 1:
+			   (opcode == `EXE_REGIMM_INST && rt == `EXE_BGTZ && a[31] == 0 && ~(a == 4'H0000))? 1:
+			   (opcode == `EXE_BLEZ && (a[31] == 1 || a == 4'H0000 ))? 1:
+			   (opcode == `EXE_REGIMM_INST && rt == `EXE_BLTZ && a[31] == 1)? 1:0;
+
+			   
 endmodule

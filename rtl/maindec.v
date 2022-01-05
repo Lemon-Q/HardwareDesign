@@ -62,7 +62,14 @@ module maindec(
 			`EXE_SH:controls <= 11'b00101000000;//SH 存半字
 			`EXE_SB:controls <= 11'b00101000000;//SB 存字节
 			//跳转指令
+			//B跳转指令
 			`EXE_BEQ:controls <= 11'b00010000000;//BEQ
+			`EXE_BNE:controls <= 11'b00010000000;//BNE
+			`EXE_BGTZ:controls <= 11'b00010000000;//BGTZ
+			`EXE_BLEZ:controls <= 11'b00010000000;//BLEZ
+			`EXE_REGIMM_INST: controls <= 11'b00010000000;// BLTZ,BLTZAL,BGTZ,BGTZAL
+			// `EXE_BLTZAL:
+			//J跳转
 			`EXE_J:controls <= 11'b00000010000;//J
 			//数据移动指令
 			//R-type与立即数型的差别在于目标寄存器控制信号regdst和alu输入信号alusrc不同
@@ -71,6 +78,7 @@ module maindec(
 			`EXE_ADDIU:controls <= 11'b10100000000;//ADDIU
 			`EXE_SLTI:controls <= 11'b10100000000;//SLTI
 			`EXE_SLTIU:controls <= 11'b10100000000;//SLTIU
+			
 			//立即数型逻辑运算
 			`EXE_ANDI:controls <= 11'b10100000000;
 			`EXE_XORI:controls <= 11'b10100000000;

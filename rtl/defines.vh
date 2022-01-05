@@ -75,7 +75,7 @@
 `define EXE_JALR  6'b001001
 `define EXE_JR  6'b001000
 `define EXE_BEQ  6'b000100
-`define EXE_BGEZ  5'b00001
+`define EXE_BGEZ  5'b00001 //这里的宏定义是五位的，他将一个寄存器的编号作为了指令的标识
 `define EXE_BGEZAL  5'b10001
 `define EXE_BGTZ  6'b000111
 `define EXE_BLEZ  6'b000110

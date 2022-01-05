@@ -24,7 +24,9 @@ module controller(
 	input wire clk,rst,
 	//decode stage
 	input wire[5:0] opD,functD,
-	output wire pcsrcD,branchD,equalD,jumpD,
+	output wire pcsrcD,branchD,
+	input equalD,
+	output jumpD,
 	output wire[1:0] hiloweD,
 	output wire[1:0] hilochooseD,
 	//execute stage
@@ -57,8 +59,7 @@ module controller(
 		jumpD,hiloweD,hilochooseD
 		);
 	aludec ad(functD,opD,alucontrolD);
-
-	assign pcsrcD = branchD & equalD;
+	assign pcsrcD = branchD & equalD; //equalD已经失去了原本的意味
 
 	//pipeline registers
 	floprc #(13) regE(
