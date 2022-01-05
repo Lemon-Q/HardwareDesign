@@ -25,6 +25,8 @@ module alu(
 	input wire[7:0] alucontrol,
 	input wire[4:0] sa,
 	output reg[31:0] result,
+	output reg[31:0] hi_result,
+	output reg[31:0] lo_result,
 	output wire overflow,
 	output wire zero
     );

@@ -25,7 +25,8 @@ module controller(
 	//decode stage
 	input wire[5:0] opD,functD,
 	output wire pcsrcD,branchD,equalD,jumpD,
-	
+	output wire[1:0] hiloweD,
+	output wire[1:0] hilochooseD,
 	//execute stage
 	input wire flushE,
 	output wire memtoregE,alusrcE,
@@ -37,7 +38,6 @@ module controller(
 				regwriteM,
 	//write back stage
 	output wire memtoregW,regwriteW
-
     );
 	
 	//decode stage
@@ -50,11 +50,11 @@ module controller(
 	wire memwriteE;
 
 	maindec md(
-		opD,
+		opD,functD,
 		memtoregD,memwriteD,
 		branchD,alusrcD,
 		regdstD,regwriteD,
-		jumpD 
+		jumpD,hiloweD,hilochooseD
 		);
 	aludec ad(functD,opD,alucontrolD);
 

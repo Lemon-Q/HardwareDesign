@@ -35,12 +35,14 @@ module mips(
 	wire [7:0] alucontrolE;
 	wire flushE,equalD;
 	wire [3:0] waM;
+	wire [1:0]hiloweD;
+	wire [1:0]hilochooseD;
 
 	controller c(
 		clk,rst,
 		//decode stage
 		opD,functD,
-		pcsrcD,branchD,equalD,jumpD,
+		pcsrcD,branchD,equalD,jumpD,hiloweD,hilochooseD,
 		
 		//execute stage
 		flushE,
@@ -62,6 +64,8 @@ module mips(
 		//decode stage
 		pcsrcD,branchD,
 		jumpD,
+		hiloweD,
+		hilochooseD,
 		equalD,
 		opD,functD,
 		//execute stage

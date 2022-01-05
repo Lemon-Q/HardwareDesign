@@ -28,6 +28,8 @@ module datapath(
 	//decode stage
 	input wire pcsrcD,branchD,
 	input wire jumpD,
+	input wire[1:0] hiloweD,
+	input wire[1:0] hilochooseD,
 	output wire equalD,
 	output wire[5:0] opD,functD,
 	//execute stage
@@ -70,17 +72,33 @@ module datapath(
 	wire [31:0] aluoutE;
 	wire [1:0] srcb3Elower2;
 	wire [2:0] uorlborhE;
-	wire[3:0] waE;
+	wire [3:0] waE;
+	wire [1:0] hiloweE;
+	wire [1:0] hilochooseE;
+	wire [31:0] hi_inE;
+	wire [31:0] lo_inE;
+	wire [31:0] hi_aluE;
+	wire [31:0] lo_aluE;
 	//mem stage
 	wire [4:0] writeregM;
 	wire [1:0] srcb3Mlower2;
 	wire [2:0] uorlborhM;
+
+	wire [1:0] hilochooseM;
 	//writeback stage
 	wire [4:0] writeregW;
 	wire [31:0] aluoutW,readdataW,resultW,result2W;
 	wire [1:0] srcb3Wlower2;
 	wire [2:0] uorlborhW;
-
+	wire [1:0] hilochooseW;
+	wire[31:0] hilooutW;
+	wire[31:0] result3W;
+	wire[31:0] hi_inM;
+	wire[31:0] lo_inM;
+	wire[1:0] hiloweM;
+	wire[31:0] hilooutM;
+	wire [31:0] hi_oW;
+	wire [31:0] lo_oW;
 	//hazard detection
 	hazard h(
 		//fetch stage
@@ -113,7 +131,7 @@ module datapath(
 		jumpD,pcnextFD);
 
 	//regfile (operates in decode and writeback)
-	regfile rf(clk,regwriteW,rsD,rtD,writeregW,result2W,srcaD,srcbD);
+	regfile rf(clk,regwriteW,rsD,rtD,writeregW,result3W,srcaD,srcbD);
 
 	//fetch stage logic
 	pc #(32) pcreg(clk,rst,~stallF,pcnextFD,pcF);
@@ -143,11 +161,13 @@ module datapath(
 	floprc #(5) r5E(clk,rst,flushE,rtD,rtE);
 	floprc #(5) r6E(clk,rst,flushE,rdD,rdE);
 	floprc #(5) r7E(clk,rst,flushE,saD,saE);
+	floprc #(2) r8E(clk,rst,flushE,hiloweD,hiloweE);
+	floprc #(2) r9E(clk,rst,flushE,hilochooseD,hilochooseE);
 
 	mux3 #(32) forwardaemux(srcaE,resultW,aluoutM,forwardaE,srca2E);
 	mux3 #(32) forwardbemux(srcbE,resultW,aluoutM,forwardbE,srcb2E);
 	mux2 #(32) srcbmux(srcb2E,signimmE,alusrcE,srcb3E);
-	alu alu(srca2E,srcb3E,alucontrolE,saE,aluoutE);
+	alu alu(srca2E,srcb3E,alucontrolE,saE,aluoutE,hi_aluE,lo_aluE);
 	mux2 #(5) wrmux(rtE,rdE,regdstE,writeregE);
 	
 	assign srcb3Elower2 = srcb3E[1:0];
@@ -155,22 +175,35 @@ module datapath(
 	storemux storemux(srcb2E,alucontrolE,srcb3Elower2,waE,srcb4E);
 	loaddec loaddec(alucontrolE,uorlborhE);
 
+	assign hi_inE = (hiloweE[0] == 0)? srca2E: hi_aluE;
+	assign lo_inE = (hiloweE[0] == 0)? srca2E: lo_aluE;
+
 	//mem stage
-	
 	flopr #(32) r1M(clk,rst,srcb4E,writedataM);
 	flopr #(32) r2M(clk,rst,aluoutE,aluoutM);
 	flopr #(5) r3M(clk,rst,writeregE,writeregM);
 	flopr #(3) r4M(clk,rst,uorlborhE,uorlborhM);
 	flopr #(2) r5M(clk,rst,srcb3Elower2,srcb3Mlower2);
 	flopr #(4) r6M(clk,rst,waE,waM);
+	flopr #(32) r7M(clk,rst,hi_inE,hi_inM);
+	flopr #(32) r8M(clk,rst,lo_inE,lo_inM);
+	flopr #(2) r9M(clk,rst,hiloweE,hiloweM);
+	floprc #(2) r10M(clk,rst,flushE,hilochooseE,hilochooseM);
 	
+	hilo_reg hilo_reg(clk,rst,hiloweM[1],hi_inM,lo_inM,hi_oW,lo_oW);
+
 	//writeback stage
 	flopr #(32) r1W(clk,rst,aluoutM,aluoutW);
 	flopr #(32) r2W(clk,rst,readdataM,readdataW);
 	flopr #(5) r3W(clk,rst,writeregM,writeregW);
 	flopr #(3) r4W(clk,rst,uorlborhM,uorlborhW);
 	flopr #(2) r5W(clk,rst,srcb3Mlower2,srcb3Wlower2);
+	flopr #(2) r7W(clk,rst,hilochooseM,hilochooseW);
 
+	assign hilooutW = (hilochooseW[1] == 1)? hi_oW : lo_oW;
 	mux2 #(32) resmux(aluoutW,readdataW,memtoregW,resultW);
-	loadmux loadmux(resultW,uorlborhW,srcb3Wlower2,result2W);//暂时Drop掉该多路选择器，这个选择器本身没有值得留意的bug,如何Drop见上面的写回
+	loadmux loadmux(resultW,uorlborhW,srcb3Wlower2,result2W);
+
+	assign result3W = (hilochooseW[0] == 1)? hilooutW : result2W;
+
 endmodule
