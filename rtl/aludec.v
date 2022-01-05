@@ -36,6 +36,10 @@ module aludec(
 				`EXE_SUBU:alucontrol <= `EXE_SUBU_OP;//unsigned sub
 				`EXE_SLT:alucontrol <= `EXE_SLT_OP; //slt
 				`EXE_SLTU:alucontrol <= `EXE_SLTU_OP;//sltu
+				`EXE_MULT:alucontrol <= `EXE_MULT_OP; //乘法
+				`EXE_MULTU:alucontrol <= `EXE_MULTU_OP;//无符号乘法
+				`EXE_DIV:alucontrol <= `EXE_DIV_OP;  //除法
+				`EXE_DIVU:alucontrol <= `EXE_DIVU_OP;  //无符号除法
 				//逻辑
 				`EXE_AND:alucontrol <= `EXE_AND_OP; //and
 				`EXE_OR:alucontrol <= `EXE_OR_OP; //or
@@ -56,7 +60,6 @@ module aludec(
 			`EXE_LHU: alucontrol <= `EXE_LHU_OP;
 			`EXE_LB: alucontrol <= `EXE_LB_OP;
 			`EXE_LBU:alucontrol <= `EXE_LBU_OP;
-
 			`EXE_SW: alucontrol <= `EXE_ADD_OP;//sw
 			`EXE_SH: alucontrol <= `EXE_SH_OP;
 			`EXE_SB: alucontrol <= `EXE_SB_OP;

@@ -29,9 +29,10 @@ module maindec(
 	output wire branch,alusrc,
 	output wire regdst,regwrite,
 	output wire jump,
-	output wire[1:0] hilowe, //高位为写使能，地位为原操作数来自alu还是来自寄存器
-	output wire[1:0] hilochoose
+	output wire[1:0] hilowe, //高位为写使能，低位为原操作数来自alu还是来自寄存器
+	output wire[1:0] hilochoose //hi or lo ,写回寄存器堆 普通 or hilo
     );
+	
 	parameter CONTROL_LENTH=11;
 	
 	reg[CONTROL_LENTH-1:0] controls;
@@ -49,6 +50,10 @@ module maindec(
 					`EXE_MFLO: controls <= 11'b11000000001; //LO寄存器→通用寄存器
 					`EXE_MTHI: controls <= 11'b00000001000; //通用寄存器→HI寄存器
 					`EXE_MTLO: controls <= 11'b00000001000; //通用寄存器→LO寄存器
+					`EXE_MULT: controls <= 11'b11000001100; //乘法
+					`EXE_MULTU:controls <= 11'b11000001100; //无符号乘法
+					`EXE_DIV:  controls <= 11'b11000001100;  //除法
+					`EXE_DIVU: controls <= 11'b11000001100;  //无符号除法
 					default:controls <= 11'b11000000000;//R-TYRE
 				endcase
 			
@@ -62,14 +67,7 @@ module maindec(
 			`EXE_SH:controls <= 11'b00101000000;//SH 存半字
 			`EXE_SB:controls <= 11'b00101000000;//SB 存字节
 			//跳转指令
-			//B跳转指令
 			`EXE_BEQ:controls <= 11'b00010000000;//BEQ
-			`EXE_BNE:controls <= 11'b00010000000;//BNE
-			`EXE_BGTZ:controls <= 11'b00010000000;//BGTZ
-			`EXE_BLEZ:controls <= 11'b00010000000;//BLEZ
-			`EXE_REGIMM_INST: controls <= 11'b00010000000;// BLTZ,BLTZAL,BGTZ,BGTZAL
-			// `EXE_BLTZAL:
-			//J跳转
 			`EXE_J:controls <= 11'b00000010000;//J
 			//数据移动指令
 			//R-type与立即数型的差别在于目标寄存器控制信号regdst和alu输入信号alusrc不同
@@ -78,7 +76,6 @@ module maindec(
 			`EXE_ADDIU:controls <= 11'b10100000000;//ADDIU
 			`EXE_SLTI:controls <= 11'b10100000000;//SLTI
 			`EXE_SLTIU:controls <= 11'b10100000000;//SLTIU
-			
 			//立即数型逻辑运算
 			`EXE_ANDI:controls <= 11'b10100000000;
 			`EXE_XORI:controls <= 11'b10100000000;

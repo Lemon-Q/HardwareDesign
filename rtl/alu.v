@@ -24,9 +24,12 @@ module alu(
 	input wire[31:0] num1,num2, // 两个源操作数
 	input wire[7:0] alucontrol,
 	input wire[4:0] sa,
+
+	input wire [63:0] divres,
+
 	output reg[31:0] result,
-	output reg[31:0] hi_result,
-	output reg[31:0] lo_result,
+	output wire[31:0] hi_result,
+	output wire[31:0] lo_result,
 	output wire overflow,
 	output wire zero
     );
@@ -38,7 +41,18 @@ module alu(
 	assign uenum2 = {{16{1'b0}}, num2[15:0]}; // Unsigned extension num2
 	assign luinum2 = {num2[15:0], {16{1'b0}}}; //Lui extension num2
 
-	
+
+	//************************乘法************************
+	wire [31:0] mult_num1,mult_num2;
+    wire [63:0] mul_res;
+    wire [63:0] mul_res_1;
+    assign mult_num1= (num1[31]&&(alucontrol==`EXE_MULT_OP))?(~num1+1):num1;
+    assign mult_num2= (num2[31]&&(alucontrol==`EXE_MULT_OP))?(~num2+1):num2;
+    assign mul_res=mult_num1*mult_num2;
+    assign mul_res_1=~(mult_num1*mult_num2)+1;
+	//************************乘法************************
+
+
 	always @(*)
 		begin
     		case (alucontrol)
@@ -54,7 +68,7 @@ module alu(
 				`EXE_SLT_OP: //比较
             		result <= subr[31];
 				`EXE_SLTU_OP://比较,不考虑溢出
-					result <= subr[31]; // SLTU有BUG
+					result <= (num1<num2)?1'b1:1'b0; 
 				//访存指令，sw和lw使用EXE_ADD_OP完成，不再考虑:
 				`EXE_SH_OP:
 					result <= addr;
@@ -104,6 +118,20 @@ module alu(
     		endcase
 		end
 	
+
+	//***************************乘除法写hilo寄存器***************************
+
+	assign hi_result=(((alucontrol==`EXE_MULT_OP)&&~(num1[31]^num2[31]))|(alucontrol==`EXE_MULTU_OP))?mul_res[63:32]:
+                 ((alucontrol==`EXE_MULT_OP)&&(num1[31]^num2[31]))?mul_res_1[63:32]:
+                 ((alucontrol==`EXE_DIV_OP)|(alucontrol==`EXE_DIVU_OP))?divres[63:32]:32'b0;//如果不是乘除法指令，默认为0？
+
+	assign lo_result=(((alucontrol==`EXE_MULT_OP)&&~(num1[31]^num2[31]))|(alucontrol==`EXE_MULTU_OP))?mul_res[31:0]:
+                 ((alucontrol==`EXE_MULT_OP)&&(num1[31]^num2[31]))?mul_res_1[31:0]:
+                 ((alucontrol==`EXE_DIV_OP)|(alucontrol==`EXE_DIVU_OP))?divres[31:0]:32'b0;
+				 
+	//***************************乘除法写hilo寄存器***************************
+
+
 	assign overflow= ((alucontrol==`EXE_ADD_OP)|(alucontrol==`EXE_ADDI_OP))?((!num1[31]&&!num2[31]&&result[31])|(num1[31]&&num2[31]&&!result[31])):
                 (alucontrol==`EXE_SUB_OP)?((!num1[31]&num2[31]&result[31])|(num1[31]&!num2[31]&!result[31])):1'b0;
 

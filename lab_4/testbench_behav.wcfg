@@ -13,13 +13,13 @@
    <zoom_setting>
       <ZoomStartTime time="0.000 ns"></ZoomStartTime>
       <ZoomEndTime time="1,000.001 ns"></ZoomEndTime>
-      <Cursor1Time time="395.407 ns"></Cursor1Time>
+      <Cursor1Time time="330.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="183"></NameColumnWidth>
-      <ValueColumnWidth column_width="75"></ValueColumnWidth>
+      <NameColumnWidth column_width="170"></NameColumnWidth>
+      <ValueColumnWidth column_width="62"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="21" />
+   <WVObjectSize size="29" />
    <wvobject fp_name="/testbench/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -39,7 +39,66 @@
    <wvobject fp_name="/testbench/wa" type="array">
       <obj_property name="ElementShortName">wa[3:0]</obj_property>
       <obj_property name="ObjectShortName">wa[3:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/div/result_o" type="array">
+      <obj_property name="ElementShortName">result_o[63:0]</obj_property>
+      <obj_property name="ObjectShortName">result_o[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/div/ready_o" type="logic">
+      <obj_property name="ElementShortName">ready_o</obj_property>
+      <obj_property name="ObjectShortName">ready_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/div/opdata1_i" type="array">
+      <obj_property name="ElementShortName">opdata1_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">opdata1_i[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/div/opdata2_i" type="array">
+      <obj_property name="ElementShortName">opdata2_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">opdata2_i[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/div/start_i" type="logic">
+      <obj_property name="ElementShortName">start_i</obj_property>
+      <obj_property name="ObjectShortName">start_i</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/div/annul_i" type="logic">
+      <obj_property name="ElementShortName">annul_i</obj_property>
+      <obj_property name="ObjectShortName">annul_i</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/hilo_reg/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/hilo_reg/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/hilo_reg/we" type="logic">
+      <obj_property name="ElementShortName">we</obj_property>
+      <obj_property name="ObjectShortName">we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/hilo_reg/hi" type="array">
+      <obj_property name="ElementShortName">hi[31:0]</obj_property>
+      <obj_property name="ObjectShortName">hi[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/hilo_reg/lo" type="array">
+      <obj_property name="ElementShortName">lo[31:0]</obj_property>
+      <obj_property name="ObjectShortName">lo[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/hilo_reg/hi_o" type="array">
+      <obj_property name="ElementShortName">hi_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">hi_o[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/hilo_reg/lo_o" type="array">
+      <obj_property name="ElementShortName">lo_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">lo_o[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/div/cnt" type="array">
+      <obj_property name="ElementShortName">cnt[5:0]</obj_property>
+      <obj_property name="ObjectShortName">cnt[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testbench/dut/mips/dp/alu/alucontrol" type="array">
+      <obj_property name="ElementShortName">alucontrol[7:0]</obj_property>
+      <obj_property name="ObjectShortName">alucontrol[7:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/testbench/dut/mips/dp/rf/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
@@ -76,34 +135,5 @@
    <wvobject fp_name="/testbench/dut/mips/dp/rf/rf" type="array">
       <obj_property name="ElementShortName">rf[31:0][31:0]</obj_property>
       <obj_property name="ObjectShortName">rf[31:0][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-   </wvobject>
-   <wvobject fp_name="/testbench/dut/mips/dp/srcb2E" type="array">
-      <obj_property name="ElementShortName">srcb2E[31:0]</obj_property>
-      <obj_property name="ObjectShortName">srcb2E[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/testbench/dut/mips/dp/hilo_reg/hi_o" type="array">
-      <obj_property name="ElementShortName">hi_o[31:0]</obj_property>
-      <obj_property name="ObjectShortName">hi_o[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/testbench/dut/mips/dp/result3W" type="array">
-      <obj_property name="ElementShortName">result3W[31:0]</obj_property>
-      <obj_property name="ObjectShortName">result3W[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/testbench/dut/mips/dp/hilooutW" type="array">
-      <obj_property name="ElementShortName">hilooutW[31:0]</obj_property>
-      <obj_property name="ObjectShortName">hilooutW[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/testbench/dut/mips/dp/hi_oW" type="array">
-      <obj_property name="ElementShortName">hi_oW[31:0]</obj_property>
-      <obj_property name="ObjectShortName">hi_oW[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/testbench/dut/mips/dp/lo_oW" type="array">
-      <obj_property name="ElementShortName">lo_oW[31:0]</obj_property>
-      <obj_property name="ObjectShortName">lo_oW[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/testbench/dut/mips/dp/hilochooseW" type="array">
-      <obj_property name="ElementShortName">hilochooseW[1:0]</obj_property>
-      <obj_property name="ObjectShortName">hilochooseW[1:0]</obj_property>
    </wvobject>
 </wave_config>

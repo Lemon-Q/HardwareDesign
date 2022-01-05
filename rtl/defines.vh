@@ -75,7 +75,7 @@
 `define EXE_JALR  6'b001001
 `define EXE_JR  6'b001000
 `define EXE_BEQ  6'b000100
-`define EXE_BGEZ  5'b00001 //这里的宏定义是五位的，他将一个寄存器的编号作为了指令的标识
+`define EXE_BGEZ  5'b00001
 `define EXE_BGEZAL  5'b10001
 `define EXE_BGTZ  6'b000111
 `define EXE_BLEZ  6'b000110
@@ -238,6 +238,25 @@
 `define DataMemNum 64
 `define DataMemNumLog2 17
 `define ByteWidth 7:0
+
+
+
+
+//div
+`define DivFree 2'b00
+`define DivByZero 2'b01
+`define DivOn 2'b10
+`define DivEnd 2'b11
+`define DivResultReady 1'b1
+`define DivResultNotReady 1'b0
+`define DivStart 1'b1
+`define DivStop 1'b0
+`define RstEnable 		1'b1
+`define RstDisable		1'b0
+
+
+
+
 
 // //regfiles macro definition
 

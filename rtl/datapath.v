@@ -37,7 +37,7 @@ module datapath(
 	input wire alusrcE,regdstE,
 	input wire regwriteE,
 	input wire[7:0] alucontrolE,
-	output wire flushE,
+	output wire flushE,stallE,
 	
 	//mem stage
 	input wire memtoregM,
@@ -109,12 +109,13 @@ module datapath(
 		forwardaD,forwardbD,
 		stallD,
 		//execute stage
+		divstallE,
 		rsE,rtE,
 		writeregE,
 		regwriteE,
 		memtoregE,
 		forwardaE,forwardbE,
-		flushE,
+		flushE,stallE,
 		//mem stage
 		writeregM,
 		regwriteM,
@@ -144,8 +145,7 @@ module datapath(
 	adder pcadd2(pcplus4D,signimmshD,pcbranchD);
 	mux2 #(32) forwardamux(srcaD,aluoutM,forwardaD,srca2D); 
 	mux2 #(32) forwardbmux(srcbD,aluoutM,forwardbD,srcb2D);
-				//eqcmp在实现上有修改，为了实现B跳转指令
-	eqcmp comp(srca2D,srcb2D,opD,rtD,equalD);
+	eqcmp comp(srca2D,srcb2D,equalD);
 
 	assign opD = instrD[31:26];
 	assign functD = instrD[5:0];
@@ -155,20 +155,33 @@ module datapath(
 	assign saD = instrD[10:6];
 
 	//execute stage
-	floprc #(32) r1E(clk,rst,flushE,srcaD,srcaE);
-	floprc #(32) r2E(clk,rst,flushE,srcbD,srcbE);
-	floprc #(32) r3E(clk,rst,flushE,signimmD,signimmE);
-	floprc #(5) r4E(clk,rst,flushE,rsD,rsE);
-	floprc #(5) r5E(clk,rst,flushE,rtD,rtE);
-	floprc #(5) r6E(clk,rst,flushE,rdD,rdE);
-	floprc #(5) r7E(clk,rst,flushE,saD,saE);
-	floprc #(2) r8E(clk,rst,flushE,hiloweD,hiloweE);
-	floprc #(2) r9E(clk,rst,flushE,hilochooseD,hilochooseE);
+	flopenrc #(32) r1E(clk,rst,~stallE,flushE,srcaD,srcaE);
+	flopenrc #(32) r2E(clk,rst,~stallE,flushE,srcbD,srcbE);
+	flopenrc #(32) r3E(clk,rst,~stallE,flushE,signimmD,signimmE);
+	flopenrc #(5) r4E(clk,rst,~stallE,flushE,rsD,rsE);
+	flopenrc #(5) r5E(clk,rst,~stallE,flushE,rtD,rtE);
+	flopenrc #(5) r6E(clk,rst,~stallE,flushE,rdD,rdE);
+	flopenrc #(5) r7E(clk,rst,~stallE,flushE,saD,saE);
+	flopenrc #(2) r8E(clk,rst,~stallE,flushE,hiloweD,hiloweE);
+	flopenrc #(2) r9E(clk,rst,~stallE,flushE,hilochooseD,hilochooseE);
+
 
 	mux3 #(32) forwardaemux(srcaE,resultW,aluoutM,forwardaE,srca2E);
 	mux3 #(32) forwardbemux(srcbE,resultW,aluoutM,forwardbE,srcb2E);
 	mux2 #(32) srcbmux(srcb2E,signimmE,alusrcE,srcb3E);
-	alu alu(srca2E,srcb3E,alucontrolE,saE,aluoutE,hi_aluE,lo_aluE);
+
+	//************************调用除法模块************************
+	wire signed_div_i,start_i,annul_i,ready_o;
+	assign signed_div_i = (alucontrolE == `EXE_DIV_OP);
+	assign start_i = (alucontrolE == `EXE_DIV_OP || alucontrolE == `EXE_DIVU_OP) && (~ready_o);
+	assign annul_i = 0;// 1表示取消除法运算,目前先设为0
+	wire [63:0] result_oE;
+	wire divstallE;
+	assign divstallE = start_i & (~ready_o);
+	div div(clk,rst,signed_div_i,srca2E,srcb3E,start_i,annul_i,result_oE,ready_o);
+	//************************调用除法模块************************
+	
+	alu alu(srca2E,srcb3E,alucontrolE,saE,result_oE,aluoutE,hi_aluE,lo_aluE);
 	mux2 #(5) wrmux(rtE,rdE,regdstE,writeregE);
 	
 	assign srcb3Elower2 = srcb3E[1:0];
@@ -189,7 +202,7 @@ module datapath(
 	flopr #(32) r7M(clk,rst,hi_inE,hi_inM);
 	flopr #(32) r8M(clk,rst,lo_inE,lo_inM);
 	flopr #(2) r9M(clk,rst,hiloweE,hiloweM);
-	floprc #(2) r10M(clk,rst,flushE,hilochooseE,hilochooseM);
+	flopenrc #(2) r10M(clk,rst,~stallE,flushE,hilochooseE,hilochooseM);
 	
 	hilo_reg hilo_reg(clk,rst,hiloweM[1],hi_inM,lo_inM,hi_oW,lo_oW);
 
