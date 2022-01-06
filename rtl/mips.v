@@ -37,12 +37,13 @@ module mips(
 	wire [3:0] waM;
 	wire [1:0]hiloweD;
 	wire [1:0]hilochooseD;
-
+	wire [4:0] rtD;
+	wire linkD,jalD,jrD;
 	controller c(
 		clk,rst,
 		//decode stage
-		opD,functD,
-		pcsrcD,branchD,equalD,jumpD,hiloweD,hilochooseD,
+		opD,functD,rtD,
+		pcsrcD,branchD,equalD,jumpD,hiloweD,hilochooseD,linkD,jalD,jrD,
 		
 		//execute stage
 		flushE,stallE,
@@ -62,12 +63,12 @@ module mips(
 		pcF,
 		instrF,
 		//decode stage
-		pcsrcD,branchD,
+		branchD,
 		jumpD,
 		hiloweD,
-		hilochooseD,
+		hilochooseD,linkD,jalD,jrD,
 		equalD,
-		opD,functD,
+		opD,functD,rtD,
 		//execute stage
 		memtoregE,
 		alusrcE,regdstE,

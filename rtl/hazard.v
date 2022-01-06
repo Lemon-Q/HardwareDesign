@@ -40,6 +40,8 @@ module hazard(
 	input wire[4:0] writeregM,
 	input wire regwriteM,
 	input wire memtoregM,
+	input wire jalM,
+	input wire jalW,
 
 	//write back stage
 	input wire[4:0] writeregW,
@@ -49,8 +51,9 @@ module hazard(
 	wire lwstallD,branchstallD;
 
 	//forwarding sources to D stage (branch equality)
-	assign forwardaD = (rsD != 0 & rsD == writeregM & regwriteM);
-	assign forwardbD = (rtD != 0 & rtD == writeregM & regwriteM);
+	assign forwardaD = (rsD != 0 & (rsD == (writeregM & regwriteM) || (rsD == 5'b11111 & jalM)));//(rsD == 5'b11111 & jalM)
+	assign forwardbD = (rtD != 0 & rtD == (writeregM & regwriteM) || (rtD == 5'b11111 & jalM));//(rtD == 5'b11111 & jalM)
+
 	
 	//forwarding sources to E stage (ALU)
 
@@ -59,20 +62,20 @@ module hazard(
 		forwardbE = 2'b00;
 		if(rsE != 0) begin
 			/* code */
-			if(rsE == writeregM & regwriteM) begin
+			if(rsE == writeregM & regwriteM || (rsE == 5'b11111 && jalM)) begin
 				/* code */
 				forwardaE = 2'b10;
-			end else if(rsE == writeregW & regwriteW) begin
+			end else if(rsE == writeregW & regwriteW || (rsE == 5'b11111 && jalW)) begin
 				/* code */
 				forwardaE = 2'b01;
 			end
 		end
 		if(rtE != 0) begin
 			/* code */
-			if(rtE == writeregM & regwriteM) begin
+			if(rtE == writeregM & regwriteM || (rtE == 5'b11111 && jalM)) begin
 				/* code */
 				forwardbE = 2'b10;
-			end else if(rtE == writeregW & regwriteW) begin
+			end else if(rtE == writeregW & regwriteW || (rtE == 5'b11111 && jalW)) begin
 				/* code */
 				forwardbE = 2'b01;
 			end

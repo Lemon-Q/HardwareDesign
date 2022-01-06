@@ -24,6 +24,7 @@
 module aludec(
 	input wire[5:0] funct,
 	input wire[5:0] op,
+	input wire[4:0] rtD,
 	output reg[7:0] alucontrol
     );
 	always @(*) begin
@@ -52,7 +53,16 @@ module aludec(
 				`EXE_SLLV:alucontrol <= `EXE_SLLV_OP; //sllv
 				`EXE_SRLV:alucontrol <= `EXE_SRLV_OP; //srlv
 				`EXE_SRAV:alucontrol <= `EXE_SRAV_OP; //srav
+				//跳转
+				`EXE_JALR:alucontrol <= `EXE_BLTZ_OP;
 				default:  alucontrol <= 8'b00000000; 
+			endcase
+			`EXE_REGIMM_INST:
+			case (rtD)
+				`EXE_BLTZ:alucontrol <=`EXE_BLTZ_OP;
+				`EXE_BLTZAL:alucontrol <= `EXE_BLTZAL_OP;
+				`EXE_BGEZ:alucontrol <= `EXE_BGEZ_OP;
+				`EXE_BGEZAL:alucontrol <=`EXE_BGEZAL_OP;
 			endcase
 			//访存指令
 			`EXE_LW: alucontrol <= `EXE_ADD_OP;// lw add (for lw/sw/addi)

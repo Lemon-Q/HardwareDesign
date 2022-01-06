@@ -113,6 +113,14 @@ module alu(
 					result <= num1 | uenum2;
 				`EXE_LUI_OP:
 					result <= luinum2;
+				`EXE_BLTZAL_OP:
+					result <= num1 + 32'b100;
+				`EXE_BGEZAL_OP:
+					result <= num1 + 32'b100;
+				`EXE_JAL_OP:
+					result <= num1 + 32'b100;
+				`EXE_JALR_OP:
+					result <= num1 + 32'b100;
         		default: //改正或与异或bug，逻辑指令二次测试完成
             		result <= 32'b0;
     		endcase
